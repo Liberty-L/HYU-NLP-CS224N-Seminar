@@ -20,6 +20,9 @@ class PartialParse(object):
         self.sentence = sentence
 
         ### YOUR CODE HERE (3 Lines)
+        self.stack = ["ROOT"]
+        self.buffer = self.sentence[:]
+        self.dependencies = []
         ### Your code should initialize the following fields:
         ###     self.stack: The current stack represented as a list with the top of the stack as the
         ###                 last element of the list.
@@ -45,6 +48,15 @@ class PartialParse(object):
                                 transition is a legal transition.
         """
         ### YOUR CODE HERE (~7-12 Lines)
+        if transition == "S": self.stack.append(self.buffer.pop(0)) # pop first element is O(n)... but code gets easier
+        else:
+            first_word = self.stack.pop()
+            second_word = self.stack.pop()
+            dependency = (first_word, second_word)
+            if transition == "RA": dependency = (second_word, first_word)
+            self.dependencies.append(dependency)
+            self.stack.append(dependency[0]) # the one on the left of the dependency is the head
+
         ### TODO:
         ###     Implement a single parsing step, i.e. the logic for the following as
         ###     described in the pdf handout:
